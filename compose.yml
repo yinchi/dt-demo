@@ -1,0 +1,70 @@
+name: dt-demo
+
+# Services are to be built using the bake file, thus we only specify the image tags here.
+services:
+  api:
+    image: ghcr.io/yinchi/dt-demo-api:latest
+    volumes:
+      - ./auth.db:/app/auth.db
+    environment:
+      - JWT_ISSUER="dt-demo"
+      - JWT_EXPIRATION_DELTA=86400
+      # protocol: // <empty hostname> / <absolute path with leading slash> = 4 slashes
+      - DB_URL=sqlite+aiosqlite:////app/auth.db
+    secrets:
+      - jwt_secret
+      - admin_password
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.api.middlewares=api-strip-prefix"
+      - "traefik.http.middlewares.api-strip-prefix.stripprefix.prefixes=/api"
+    entrypoint:
+      # `fastapi run` defaults to 0.0.0.0:8000, so no need to specify host and port
+      - fastapi
+      - run
+      - "--root-path"
+      - "/api"
+      - "/app/dt-demo-api/src/dt_demo_api/app.py"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO /dev/null http://localhost:8000/health &> /dev/null || exit 1"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  frontend:
+    # This image uses build arguments defined in `docker-bake.hcl`.
+    image: ghcr.io/yinchi/dt-demo-frontend:latest
+    labels:
+      # Host routes /, /home, and /login -- thus mount at site root
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+  traefik:
+    image: traefik:v3
+    restart: always
+    ports:
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS
+      - "8080:8080"  # Admin dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "traefik healthcheck &> /dev/null"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    name: dt-demo-net
+    driver: bridge
+    attachable: true
+
+secrets:
+  jwt_secret:
+    file: ./dt-demo-api/secrets/jwt_secret.key
+  admin_password:
+    file: ./dt-demo-api/secrets/admin_password.key

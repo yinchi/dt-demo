@@ -1,0 +1,27 @@
+[project]
+name = "dt-demo-auth"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Yin-Chi Chan", email = "ycc39@cam.ac.uk" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "bcrypt>=4.3.0",
+    "dotenv>=0.9.9",
+    "dt-demo-auth",
+    "fastapi[standard]>=0.116.1",
+    "jwt-pydantic>=0.0.7",
+    "pydantic-settings>=2.10.1",
+    "sqlmodel>=0.0.24",
+    "uuid6>=2025.0.1",
+]
+
+[project.scripts]
+dt-demo-auth = "dt_demo_auth:main"
+
+[build-system]
+requires = ["uv_build>=0.8.9,<0.9.0"]
+build-backend = "uv_build"

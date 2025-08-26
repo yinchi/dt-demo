@@ -1,0 +1,19 @@
+# Caches
+*cache*
+
+# Python
+.venv/
+
+# Node.js
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Secrets
+*secret*
+!*gen_secrets*
+
+# Databases
+auth.db
