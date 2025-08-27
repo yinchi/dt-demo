@@ -26,6 +26,6 @@ target "frontend" {
   args = {
     # Build args, used to build static files from Vite project (`yarn build`)
     # Do NOT include trailing slashes
-    "VITE_BACKEND_URL" = "http://localhost/api/"
+    "VITE_BACKEND_URL" = "http://localhost/api"
   }
 }
