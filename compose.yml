@@ -7,7 +7,7 @@ services:
     volumes:
       - ./auth.db:/app/auth.db
     environment:
-      - JWT_ISSUER="dt-demo"
+      - JWT_ISSUER=dt-demo
       - JWT_EXPIRATION_DELTA=86400
       # protocol: // <empty hostname> / <absolute path with leading slash> = 4 slashes
       - DB_URL=sqlite+aiosqlite:////app/auth.db
