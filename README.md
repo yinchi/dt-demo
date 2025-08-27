@@ -128,3 +128,4 @@ If we have separate Docker containers for each frontend service, then we must de
 1. `docker compose up -d`
 
 Additionally, `just ruff` and `just prettier` will format and lint all Python and Typescript packages, respectively (packages must be listed manually in the `justfile`).
+1. Create (`touch`) any files (e.g. SQLite databases) required by Docker &mdash; otherwise, Docker will create a **directory** for the bind mount instead of a single file.
