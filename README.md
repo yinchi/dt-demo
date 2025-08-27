@@ -92,9 +92,15 @@ However, only one package will be the main package for running Vite, and all HTM
 > [!NOTE]
 > Options 2-4 have not yet been tested.  Additional steps may be required to ensure the imported package is available as a `.js` file in the build output.
 
-#### Why we restrict ourselves to a single Vite instance
+## Why we restrict ourselves to a single frontend instance
 
-If we have separate Docker containers for each frontend service, then we must deploy our service to the Docker Compose stack just to test it, as all services must be behind the same reverse proxy (e.g. Traefik) for cookies to work.  Instead, by making the entire frontend a single unit, we do not need to handle the problem of the login service and application service being on different hosts/ports.
+If we have separate Docker containers for each frontend service, then we must deploy all services in a **single Compose stack** just to test the new service, as all services must be behind the same reverse proxy (e.g. Traefik) for cookies to work.  Wrapping all frontend services into a single static server simplifies this deployment.
+
+> [!NOTE]
+> In the future, we can attempt to:
+> - Set up Single-Sign-On (SSO) with [Keycloak](https://www.keycloak.org/), allowing services on different hosts to share login information.
+> - Set up a Docker Compose stack with self-discovery and routing setup of test containers via Traefik.  Use [Compose Watch](https://docs.docker.com/compose/how-tos/file-watch/) to sync the container with the source code.  This way, both production and development containers share a hostname via the Traefik reverse proxy.
+>     - Make sure development versions of services are accessible to **developer accounts only**.
 
 ## Developer setup
 
