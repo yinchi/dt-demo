@@ -61,7 +61,7 @@ def examples(*tuples: tuple[str, int, str]) -> dict[int, dict]:
 
 @router.post(
     "/token",
-    summary="Token",
+    summary="Get JWT token",
     description="Obtain a JWT token.",
     responses=examples(
         (

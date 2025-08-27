@@ -2,12 +2,14 @@
 
 import logging
 
-from fastapi import FastAPI, status
+from fastapi import Depends, FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, RedirectResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
+from typing_extensions import Annotated
 
-import dt_demo_auth as auth
+from dt_demo_auth.router import router as auth_router
 
 # region Logging
 #
@@ -94,10 +96,21 @@ async def health() -> str:
     return "OK"
 
 
+@app.post(
+    "/token",
+    summary="Get JWT token",
+    description="Redirect to /auth/token",
+    response_class=RedirectResponse,
+)
+async def token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> RedirectResponse:
+    """Redirect to /auth/token."""
+    return RedirectResponse(url="/api/auth/token", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+
+
 # endregion
 
 # region Mounts
 #
-app.include_router(auth.router.router, prefix="/auth", tags=["auth"])
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 # endregion
