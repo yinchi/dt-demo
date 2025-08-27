@@ -104,9 +104,27 @@ If we have separate Docker containers for each frontend service, then we must de
 
 ## Developer setup
 
+1. Install `uv`:
+    ```bash
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ``` 
+    You may need to start a new terminal session for `uv` to be added to your `$PATH`.  If this fails, edit your `.bashrc` file manually.
+1. Install `yarn`:
+    ```bash
+    sudo apt-get install -y curl
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    npm install -g npm
+    npm install -g yarn
+    node -v && npm -v && yarn -v  # Check versions
+    ```
+1. Install `just`:
+    ```bash
+    apt install just
+    ```
 1. Clone the repository
-2. `just all` to build all the Docker images
+1. `just all` to build all the Docker images
    - This will also create/sync the local `uv` virtual environment and build the frontend locally in `dt-demo-frontend/dist/`
-3. `docker compose up -d`
+1. `docker compose up -d`
 
 Additionally, `just ruff` and `just prettier` will format and lint all Python and Typescript packages, respectively (packages must be listed manually in the `justfile`).
