@@ -22,7 +22,7 @@ function MyAppFooter() {
       <Group justify="space-between" flex={1} h="100%" px="sm" pt={10} pb={5}>
         {copyright()}
         <Anchor href="https://github.com/yinchi/dt-demo-gcp" target="_blank">
-          <Icon icon="octicon:mark-github-16" />
+          <Icon icon="mdi:github" fontSize={16} />
           &nbsp;GitHub
         </Anchor>
       </Group>
